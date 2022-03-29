@@ -1,4 +1,4 @@
-const { stakeNFT, unstakeNFT, stakingContract } = require("./helpers");
+const { stakeNFT, unstakeNFT, stakingContract } = require("./action");
 
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));

@@ -1,7 +1,7 @@
 const { stakeNFT, unstakeNFT, stakingContract } = require("./action");
 
 const sleep = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms)); // return the promise that has a set timer that takes place at the very end
 };
 
 const clearAndMoveStart = () => {
@@ -18,16 +18,16 @@ const main = async () => {
   const tokenID = process.env.TOKEN_ID;
 
   // Stake NFT
-  await stakeNFT(tokenID).catch((e) => {
+  await stakeNFT(tokenID).catch((e) => { // staking NFT, catch the error if there is an error
     const errorBody = e.error.error.body;
     const errorBodyJSON = JSON.parse(errorBody);
     const errorMsg = errorBodyJSON.error.message;
     console.log("Staking Failed: ", errorMsg);
-    process.exit(0);
+    process.exit(0); // end the process.
   });
 
   let unstakeAt = (await stakingContract.unstakesAt(tokenID)).toNumber();
-  if (unstakeAt == 0) return;
+  if (unstakeAt == 0) return; // go for a new iteration
 
   // let unstakeMilli = unstakeAt * 1000 - Date.now() + 10000; // add 10 seconds to avoid errors
   let unstakeMilli = unstakeAt * 1000 - Date.now() + 10000; // add 10 seconds to avoid errors
@@ -40,17 +40,17 @@ const main = async () => {
   }, 1000);
 
   // sleep to when unstake opens
-  await sleep(unstakeMilli);
+  await sleep(unstakeMilli); // after everything is done, clear the console.
 
   clearInterval(waitInterval);
   clearAndMoveStart();
 
-  await unstakeNFT(tokenID).catch((e) => {
+  await unstakeNFT(tokenID).catch((e) => { 
     const errorBody = e.error.error.body;
     const errorBodyJSON = JSON.parse(errorBody);
     const errorMsg = errorBodyJSON.error.message;
     console.log("Claiming Failed: ", errorMsg);
-    process.exit(0);
+    process.exit(0); 
   });
 };
 
@@ -59,7 +59,7 @@ const run = async () => {
   while (true) {
     console.log("Iteration No. ", count);
     await main();
-    count += 1;
+    count += 1; // keeps looping
   }
 };
 
